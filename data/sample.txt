@@ -1,0 +1,34 @@
+waggle is a synonym of wag.
+wag is a manner of jiggle.
+jiggle is a synonym of joggle.
+joggle is a manner of fasten.
+fasten is a synonym of attach.
+attach is a synonym of affix.
+affix is a morpheme.
+
+
+contrary is a synonym of reverse.
+reverse is a synonym of verso.
+verso is a page.
+page is a leaf.
+leaf is an antonym of branch.
+branch is an antonym of stem.
+stem is a synonym of root.
+
+
+balanitis is a inflammation.
+inflammation is a synonym of redness.
+redness is a synonym of inflammation.
+inflammation is a synonym of rubor.
+rubor is a synonym of inflammation.
+inflammation is a symptom.
+symptom is a synonym of manifestation.
+
+
+narcotize is a synonym of narcotise.
+narcotise is a synonym of narcotize.
+narcotize is a manner of drug.
+drug is a synonym of medicine.
+medicine is a synonym of music.
+music is a synonym of melody.
+melody is a synonym of air.
