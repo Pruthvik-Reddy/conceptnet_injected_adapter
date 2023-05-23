@@ -25,7 +25,7 @@ for i in range(num_adapters):
     model.add_adapter(adapter_name)
 
 model.set_active_adapters(adapter_names)
-model.train_adapters(adapter_names)
+model.train_adapter(adapter_names)
 
 training_args = TrainingArguments(
     output_dir="./adapter_conceptnet_model", 
