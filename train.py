@@ -36,8 +36,8 @@ training_args = TrainingArguments(
     warmup_steps=500,  
     logging_dir="./logs", 
     logging_steps=100, 
-    evaluation_strategy="steps",  
-    eval_steps=500, 
+    #evaluation_strategy="steps",  
+    #eval_steps=500, 
     dataloader_num_workers=4 
 )
 
