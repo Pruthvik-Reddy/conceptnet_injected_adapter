@@ -2,7 +2,7 @@ import torch
 from transformers import BertTokenizer, BertForMaskedLM, LineByLineTextDataset, DataCollatorForLanguageModeling, TrainingArguments,AdapterTrainer
 
 tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
-corpus_file = "./data/conceptnet_corpus.txt"
+corpus_file = "./conceptnet_data/conceptnet_corpus.txt"
 
 dataset = LineByLineTextDataset(
     tokenizer=tokenizer,
