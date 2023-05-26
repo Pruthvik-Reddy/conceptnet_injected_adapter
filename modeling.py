@@ -393,7 +393,7 @@ class AutoModelForSequenceClassification_SPV_MIP(nn.Module):
         )
         #sequence_output = outputs[0]  # [batch, max_len, hidden]
         #pooled_output = outputs[1]  # [batch, hidden]
-        print(outputs)
+        #print(outputs)
         print(dir(outputs))
         print(outputs.hidden_states)
         last_layer_hidden_states = outputs.hidden_states[-1]
