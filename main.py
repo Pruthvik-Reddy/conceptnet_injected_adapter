@@ -281,7 +281,7 @@ def load_pretrained_model(args):
         bert.bert.embeddings.token_type_embeddings = nn.Embedding(
             config.type_vocab_size, config.hidden_size
         )
-    bert._init_weights(bert.embeddings.token_type_embeddings)
+    bert._init_weights(bert.bert.embeddings.token_type_embeddings)
 
     # Additional Layers
     if args.model_type in ["BERT_BASE"]:
