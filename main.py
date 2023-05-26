@@ -274,11 +274,11 @@ def load_pretrained_model(args):
     config=adapter_config
     config.type_vocab_size = 4
     if "albert" in args.bert_model:
-        bert.embeddings.token_type_embeddings = nn.Embedding(
+        bert.bert.embeddings.token_type_embeddings = nn.Embedding(
             config.type_vocab_size, config.embedding_size
         )
     else:
-        bert.embeddings.token_type_embeddings = nn.Embedding(
+        bert.bert.embeddings.token_type_embeddings = nn.Embedding(
             config.type_vocab_size, config.hidden_size
         )
     bert._init_weights(bert.embeddings.token_type_embeddings)
