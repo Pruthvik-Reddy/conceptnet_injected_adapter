@@ -62,8 +62,8 @@ class AutoModelForSequenceClassification(nn.Module):
         )
         
         
-        last_layer_hidden_states = outputs.hidden_states[-1]
-        last_hidden_state = last_layer_hidden_states[0] 
+        #last_layer_hidden_states = outputs.hidden_states[-1]
+        last_hidden_state = outputs.hidden_states[-1]
 
         
 
@@ -135,8 +135,8 @@ class AutoModelForTokenClassification(nn.Module):
         
         #sequence_output = outputs[0]  # [batch, max_len, hidden]
         
-        last_layer_hidden_states = outputs.hidden_states[-1]
-        last_hidden_state = last_layer_hidden_states[0] 
+        #last_layer_hidden_states = outputs.hidden_states[-1]
+        last_hidden_state = outputs.hidden_states[-1]
 
         
         target_output = last_hidden_state * target_mask.unsqueeze(2)
@@ -207,8 +207,8 @@ class AutoModelForSequenceClassification_SPV(nn.Module):
         )
         #sequence_output = outputs[0]  # [batch, max_len, hidden]
         #pooled_output = outputs[0][:,0,:]  # [batch, hidden]
-        last_layer_hidden_states = outputs.hidden_states[-1]
-        last_hidden_state = last_layer_hidden_states[0] 
+        #last_layer_hidden_states = outputs.hidden_states[-1]
+        last_hidden_state = outputs.hidden_states[-1] 
         pooled_output=last_hidden_state[:,0,:]
         sequence_output=last_hidden_state
 
@@ -293,8 +293,8 @@ class AutoModelForSequenceClassification_MIP(nn.Module):
             head_mask=head_mask,
         )
         #sequence_output = outputs[0]  # [batch, max_len, hidden]
-        last_layer_hidden_states = outputs.hidden_states[-1]
-        last_hidden_state = last_layer_hidden_states[0] 
+        #last_layer_hidden_states = outputs.hidden_states[-1]
+        last_hidden_state = outputs.hidden_states[-1] 
         sequence_output=last_hidden_state
 
         # Get target ouput with target mask
@@ -305,8 +305,8 @@ class AutoModelForSequenceClassification_MIP(nn.Module):
         # Second encoder for only the target word
         outputs_2 = self.encoder(input_ids_2, attention_mask=attention_mask_2, head_mask=head_mask)
         #sequence_output_2 = outputs_2[0]  # [batch, max_len, hidden]
-        last_layer_hidden_states = outputs_2.hidden_states[-1]
-        last_hidden_state = last_layer_hidden_states[0] 
+        #last_layer_hidden_states = outputs_2.hidden_states[-1]
+        last_hidden_state = outputs_2.hidden_states[-1] 
         sequence_output_2=last_hidden_state
 
 
@@ -396,8 +396,8 @@ class AutoModelForSequenceClassification_SPV_MIP(nn.Module):
         #print(outputs)
         print(dir(outputs))
         print(outputs.hidden_states)
-        last_layer_hidden_states = outputs.hidden_states[-1]
-        last_hidden_state = last_layer_hidden_states[0] 
+        #last_layer_hidden_states = outputs.hidden_states[-1]
+        last_hidden_state =  outputs.hidden_states[-1]
         pooled_output=last_hidden_state[:,0,:]
         sequence_output=last_hidden_state
 
@@ -413,8 +413,8 @@ class AutoModelForSequenceClassification_SPV_MIP(nn.Module):
         # Second encoder for only the target word
         outputs_2 = self.encoder(input_ids_2, attention_mask=attention_mask_2, head_mask=head_mask)
         #sequence_output_2 = outputs_2[0]  # [batch, max_len, hidden]
-        last_layer_hidden_states = outputs_2.hidden_states[-1]
-        last_hidden_state = last_layer_hidden_states[0] 
+        #last_layer_hidden_states = outputs_2.hidden_states[-1]
+        last_hidden_state =  outputs_2.hidden_states[-1]
         sequence_output_2=last_hidden_state
 
 
