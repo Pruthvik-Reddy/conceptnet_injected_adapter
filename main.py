@@ -28,224 +28,6 @@ CONFIG_NAME = "config.json"
 WEIGHTS_NAME = "pytorch_model.bin"
 ARGS_NAME = "training_args.bin"
 
-
-def main():
-    # read configs
-    config = Config(main_conf_path="./")
-
-    # apply system arguments if exist
-    argv = sys.argv[1:]
-    if len(argv) > 0:
-        cmd_arg = OrderedDict()
-        argvs = " ".join(sys.argv[1:]).split(" ")
-        for i in range(0, len(argvs), 2):
-            arg_name, arg_value = argvs[i], argvs[i + 1]
-            arg_name = arg_name.strip("-")
-            cmd_arg[arg_name] = arg_value
-        config.update_params(cmd_arg)
-
-    args = config
-    print(args.__dict__)
-
-    # logger
-    if "saves" in args.bert_model:
-        log_dir = args.bert_model
-        logger = Logger(log_dir)
-        config = Config(main_conf_path=log_dir)
-        old_args = copy.deepcopy(args)
-        args.__dict__.update(config.__dict__)
-
-        args.bert_model = old_args.bert_model
-        args.do_train = old_args.do_train
-        args.data_dir = old_args.data_dir
-        args.task_name = old_args.task_name
-
-        # apply system arguments if exist
-        argv = sys.argv[1:]
-        if len(argv) > 0:
-            cmd_arg = OrderedDict()
-            argvs = " ".join(sys.argv[1:]).split(" ")
-            for i in range(0, len(argvs), 2):
-                arg_name, arg_value = argvs[i], argvs[i + 1]
-                arg_name = arg_name.strip("-")
-                cmd_arg[arg_name] = arg_value
-            config.update_params(cmd_arg)
-    else:
-        if not os.path.exists("saves"):
-            os.mkdir("saves")
-        log_dir = make_log_dir(os.path.join("saves", args.bert_model))
-        logger = Logger(log_dir)
-        config.save(log_dir)
-    args.log_dir = log_dir
-
-    # set CUDA devices
-    device = torch.device("cuda" if torch.cuda.is_available() and not args.no_cuda else "cpu")
-    args.n_gpu = torch.cuda.device_count()
-    args.device = device
-
-    logger.info("device: {} n_gpu: {}".format(device, args.n_gpu))
-
-    # set seed
-    random.seed(args.seed)
-    np.random.seed(args.seed)
-    torch.manual_seed(args.seed)
-    if args.n_gpu > 0:
-        torch.cuda.manual_seed_all(args.seed)
-
-    # get dataset and processor
-    task_name = args.task_name.lower()
-    processor = processors[task_name]()
-    output_mode = output_modes[task_name]
-    label_list = processor.get_labels()
-    args.num_labels = len(label_list)
-
-    # build tokenizer and model
-    tokenizer = BertTokenizer.from_pretrained(args.bert_model, do_lower_case=args.do_lower_case)
-    model = load_pretrained_model(args)
-
-    ########### Training ###########
-
-    # VUA18 / VUA20 for bagging 
-    if args.do_train and args.task_name == "vua" and args.num_bagging:
-        train_data, gkf = load_train_data_kf(args, logger, processor, task_name, label_list, tokenizer, output_mode)
-
-        for fold, (train_idx, valid_idx) in enumerate(tqdm(gkf, desc="bagging...")):
-            if fold != args.bagging_index:
-                continue
-
-            print(f"bagging_index = {args.bagging_index}")
-
-            # Load data
-            temp_train_data = TensorDataset(*train_data[train_idx])
-            train_sampler = RandomSampler(temp_train_data)
-            train_dataloader = DataLoader(temp_train_data, sampler=train_sampler, batch_size=args.train_batch_size)
-
-            # Reset Model
-            model = load_pretrained_model(args)
-            model, best_result = run_train(args, logger, model, train_dataloader, processor, task_name, label_list, tokenizer, output_mode)
-
-            # Test
-            all_guids, eval_dataloader = load_test_data(args, logger, processor, task_name, label_list, tokenizer, output_mode)
-            preds = run_eval(args, logger, model, eval_dataloader, all_guids, task_name, return_preds=True)
-            with open(os.path.join(args.data_dir, f"seed{args.seed}_preds_{fold}.p"), "wb") as f:
-                pickle.dump(preds, f)
-
-            # If train data is VUA20, the model needs to be tested on VUAverb as well.
-            # You can just adjust the names of data_dir in conditions below for your own data directories.
-            if "VUA20" in args.data_dir:
-                # Verb
-                args.data_dir = "data/VUAverb"
-                all_guids, eval_dataloader = load_test_data(args, logger, processor, task_name, label_list, tokenizer, output_mode)
-                preds = run_eval(args, logger, model, eval_dataloader, all_guids, task_name, return_preds=True)
-                with open(os.path.join(args.data_dir, f"seed{args.seed}_preds_{fold}.p"), "wb") as f:
-                    pickle.dump(preds, f)
-
-            logger.info(f"Saved to {logger.log_dir}")
-        return                
-
-
-    # VUA18 / VUA20
-    if args.do_train and args.task_name == "vua":
-        train_dataloader = load_train_data(
-            args, logger, processor, task_name, label_list, tokenizer, output_mode
-        )
-        model, best_result = run_train(
-            args,
-            logger,
-            model,
-            train_dataloader,
-            processor,
-            task_name,
-            label_list,
-            tokenizer,
-            output_mode,
-        )
-    # TroFi / MOH-X (K-fold)
-    elif args.do_train and args.task_name == "trofi":
-        k_result = []
-        for k in tqdm(range(args.kfold), desc="K-fold"):
-            model = load_pretrained_model(args)
-            train_dataloader = load_train_data(
-                args, logger, processor, task_name, label_list, tokenizer, output_mode, k
-            )
-            model, best_result = run_train(
-                args,
-                logger,
-                model,
-                train_dataloader,
-                processor,
-                task_name,
-                label_list,
-                tokenizer,
-                output_mode,
-                k,
-            )
-            k_result.append(best_result)
-
-        # Calculate average result
-        avg_result = copy.deepcopy(k_result[0])
-        for result in k_result[1:]:
-            for k, v in result.items():
-                avg_result[k] += v
-        for k, v in avg_result.items():
-            avg_result[k] /= len(k_result)
-
-        logger.info(f"-----Averge Result-----")
-        for key in sorted(avg_result.keys()):
-            logger.info(f"  {key} = {str(avg_result[key])}")
-
-    # Load trained model
-    if "saves" in args.bert_model:
-        model = load_trained_model(args, model, tokenizer)
-
-    ########### Inference ###########
-    # VUA18 / VUA20
-    if (args.do_eval or args.do_test) and task_name == "vua":
-        # if test data is genre or POS tag data
-        if ("genre" in args.data_dir) or ("pos" in args.data_dir):
-            if "genre" in args.data_dir:
-                targets = ["acad", "conv", "fict", "news"]
-            elif "pos" in args.data_dir:
-                targets = ["adj", "adv", "noun", "verb"]
-            orig_data_dir = args.data_dir
-            for idx, target in tqdm(enumerate(targets)):
-                logger.info(f"====================== Evaluating {target} =====================")
-                args.data_dir = os.path.join(orig_data_dir, target)
-                all_guids, eval_dataloader = load_test_data(
-                    args, logger, processor, task_name, label_list, tokenizer, output_mode
-                )
-                run_eval(args, logger, model, eval_dataloader, all_guids, task_name)
-        else:
-            all_guids, eval_dataloader = load_test_data(
-                args, logger, processor, task_name, label_list, tokenizer, output_mode
-            )
-            run_eval(args, logger, model, eval_dataloader, all_guids, task_name)
-
-    # TroFi / MOH-X (K-fold)
-    elif (args.do_eval or args.do_test) and args.task_name == "trofi":
-        logger.info(f"***** Evaluating with {args.data_dir}")
-        k_result = []
-        for k in tqdm(range(10), desc="K-fold"):
-            all_guids, eval_dataloader = load_test_data(
-                args, logger, processor, task_name, label_list, tokenizer, output_mode, k
-            )
-            result = run_eval(args, logger, model, eval_dataloader, all_guids, task_name)
-            k_result.append(result)
-
-        # Calculate average result
-        avg_result = copy.deepcopy(k_result[0])
-        for result in k_result[1:]:
-            for k, v in result.items():
-                avg_result[k] += v
-        for k, v in avg_result.items():
-            avg_result[k] /= len(k_result)
-
-        logger.info(f"-----Averge Result-----")
-        for key in sorted(avg_result.keys()):
-            logger.info(f"  {key} = {str(avg_result[key])}")
-    logger.info(f"Saved to {logger.log_dir}")
-
-
 def run_train(
     args,
     logger,
@@ -557,6 +339,225 @@ def load_trained_model(args, model, tokenizer):
         model.load_state_dict(torch.load(output_model_file))
 
     return model
+
+
+def main():
+    # read configs
+    config = Config(main_conf_path="./")
+
+    # apply system arguments if exist
+    argv = sys.argv[1:]
+    if len(argv) > 0:
+        cmd_arg = OrderedDict()
+        argvs = " ".join(sys.argv[1:]).split(" ")
+        for i in range(0, len(argvs), 2):
+            arg_name, arg_value = argvs[i], argvs[i + 1]
+            arg_name = arg_name.strip("-")
+            cmd_arg[arg_name] = arg_value
+        config.update_params(cmd_arg)
+
+    args = config
+    print(args.__dict__)
+
+    # logger
+    if "saves" in args.bert_model:
+        log_dir = args.bert_model
+        logger = Logger(log_dir)
+        config = Config(main_conf_path=log_dir)
+        old_args = copy.deepcopy(args)
+        args.__dict__.update(config.__dict__)
+
+        args.bert_model = old_args.bert_model
+        args.do_train = old_args.do_train
+        args.data_dir = old_args.data_dir
+        args.task_name = old_args.task_name
+
+        # apply system arguments if exist
+        argv = sys.argv[1:]
+        if len(argv) > 0:
+            cmd_arg = OrderedDict()
+            argvs = " ".join(sys.argv[1:]).split(" ")
+            for i in range(0, len(argvs), 2):
+                arg_name, arg_value = argvs[i], argvs[i + 1]
+                arg_name = arg_name.strip("-")
+                cmd_arg[arg_name] = arg_value
+            config.update_params(cmd_arg)
+    else:
+        if not os.path.exists("saves"):
+            os.mkdir("saves")
+        log_dir = make_log_dir(os.path.join("saves", args.bert_model))
+        logger = Logger(log_dir)
+        config.save(log_dir)
+    args.log_dir = log_dir
+
+    # set CUDA devices
+    device = torch.device("cuda" if torch.cuda.is_available() and not args.no_cuda else "cpu")
+    args.n_gpu = torch.cuda.device_count()
+    args.device = device
+
+    logger.info("device: {} n_gpu: {}".format(device, args.n_gpu))
+
+    # set seed
+    random.seed(args.seed)
+    np.random.seed(args.seed)
+    torch.manual_seed(args.seed)
+    if args.n_gpu > 0:
+        torch.cuda.manual_seed_all(args.seed)
+
+    # get dataset and processor
+    task_name = args.task_name.lower()
+    processor = processors[task_name]()
+    output_mode = output_modes[task_name]
+    label_list = processor.get_labels()
+    args.num_labels = len(label_list)
+
+    # build tokenizer and model
+    tokenizer = BertTokenizer.from_pretrained(args.bert_model, do_lower_case=args.do_lower_case)
+    model = load_pretrained_model(args)
+
+    ########### Training ###########
+
+    # VUA18 / VUA20 for bagging 
+    if args.do_train and args.task_name == "vua" and args.num_bagging:
+        train_data, gkf = load_train_data_kf(args, logger, processor, task_name, label_list, tokenizer, output_mode)
+
+        for fold, (train_idx, valid_idx) in enumerate(tqdm(gkf, desc="bagging...")):
+            if fold != args.bagging_index:
+                continue
+
+            print(f"bagging_index = {args.bagging_index}")
+
+            # Load data
+            temp_train_data = TensorDataset(*train_data[train_idx])
+            train_sampler = RandomSampler(temp_train_data)
+            train_dataloader = DataLoader(temp_train_data, sampler=train_sampler, batch_size=args.train_batch_size)
+
+            # Reset Model
+            model = load_pretrained_model(args)
+            model, best_result = run_train(args, logger, model, train_dataloader, processor, task_name, label_list, tokenizer, output_mode)
+
+            # Test
+            all_guids, eval_dataloader = load_test_data(args, logger, processor, task_name, label_list, tokenizer, output_mode)
+            preds = run_eval(args, logger, model, eval_dataloader, all_guids, task_name, return_preds=True)
+            with open(os.path.join(args.data_dir, f"seed{args.seed}_preds_{fold}.p"), "wb") as f:
+                pickle.dump(preds, f)
+
+            # If train data is VUA20, the model needs to be tested on VUAverb as well.
+            # You can just adjust the names of data_dir in conditions below for your own data directories.
+            if "VUA20" in args.data_dir:
+                # Verb
+                args.data_dir = "data/VUAverb"
+                all_guids, eval_dataloader = load_test_data(args, logger, processor, task_name, label_list, tokenizer, output_mode)
+                preds = run_eval(args, logger, model, eval_dataloader, all_guids, task_name, return_preds=True)
+                with open(os.path.join(args.data_dir, f"seed{args.seed}_preds_{fold}.p"), "wb") as f:
+                    pickle.dump(preds, f)
+
+            logger.info(f"Saved to {logger.log_dir}")
+        return                
+
+
+    # VUA18 / VUA20
+    if args.do_train and args.task_name == "vua":
+        train_dataloader = load_train_data(
+            args, logger, processor, task_name, label_list, tokenizer, output_mode
+        )
+        model, best_result = run_train(
+            args,
+            logger,
+            model,
+            train_dataloader,
+            processor,
+            task_name,
+            label_list,
+            tokenizer,
+            output_mode,
+        )
+    # TroFi / MOH-X (K-fold)
+    elif args.do_train and args.task_name == "trofi":
+        k_result = []
+        for k in tqdm(range(args.kfold), desc="K-fold"):
+            model = load_pretrained_model(args)
+            train_dataloader = load_train_data(
+                args, logger, processor, task_name, label_list, tokenizer, output_mode, k
+            )
+            model, best_result = run_train(
+                args,
+                logger,
+                model,
+                train_dataloader,
+                processor,
+                task_name,
+                label_list,
+                tokenizer,
+                output_mode,
+                k,
+            )
+            k_result.append(best_result)
+
+        # Calculate average result
+        avg_result = copy.deepcopy(k_result[0])
+        for result in k_result[1:]:
+            for k, v in result.items():
+                avg_result[k] += v
+        for k, v in avg_result.items():
+            avg_result[k] /= len(k_result)
+
+        logger.info(f"-----Averge Result-----")
+        for key in sorted(avg_result.keys()):
+            logger.info(f"  {key} = {str(avg_result[key])}")
+
+    # Load trained model
+    if "saves" in args.bert_model:
+        model = load_trained_model(args, model, tokenizer)
+
+    ########### Inference ###########
+    # VUA18 / VUA20
+    if (args.do_eval or args.do_test) and task_name == "vua":
+        # if test data is genre or POS tag data
+        if ("genre" in args.data_dir) or ("pos" in args.data_dir):
+            if "genre" in args.data_dir:
+                targets = ["acad", "conv", "fict", "news"]
+            elif "pos" in args.data_dir:
+                targets = ["adj", "adv", "noun", "verb"]
+            orig_data_dir = args.data_dir
+            for idx, target in tqdm(enumerate(targets)):
+                logger.info(f"====================== Evaluating {target} =====================")
+                args.data_dir = os.path.join(orig_data_dir, target)
+                all_guids, eval_dataloader = load_test_data(
+                    args, logger, processor, task_name, label_list, tokenizer, output_mode
+                )
+                run_eval(args, logger, model, eval_dataloader, all_guids, task_name)
+        else:
+            all_guids, eval_dataloader = load_test_data(
+                args, logger, processor, task_name, label_list, tokenizer, output_mode
+            )
+            run_eval(args, logger, model, eval_dataloader, all_guids, task_name)
+
+    # TroFi / MOH-X (K-fold)
+    elif (args.do_eval or args.do_test) and args.task_name == "trofi":
+        logger.info(f"***** Evaluating with {args.data_dir}")
+        k_result = []
+        for k in tqdm(range(10), desc="K-fold"):
+            all_guids, eval_dataloader = load_test_data(
+                args, logger, processor, task_name, label_list, tokenizer, output_mode, k
+            )
+            result = run_eval(args, logger, model, eval_dataloader, all_guids, task_name)
+            k_result.append(result)
+
+        # Calculate average result
+        avg_result = copy.deepcopy(k_result[0])
+        for result in k_result[1:]:
+            for k, v in result.items():
+                avg_result[k] += v
+        for k, v in avg_result.items():
+            avg_result[k] /= len(k_result)
+
+        logger.info(f"-----Averge Result-----")
+        for key in sorted(avg_result.keys()):
+            logger.info(f"  {key} = {str(avg_result[key])}")
+    logger.info(f"Saved to {logger.log_dir}")
+
+
 
 
 if __name__ == "__main__":
