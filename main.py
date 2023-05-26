@@ -254,7 +254,7 @@ def load_pretrained_model(args):
     # Initialize the adapter model with the adapter configuration
     bert= BertForMaskedLM.from_pretrained("./adapter_conceptnet_model/", config=adapter_config)
     # Optionally, activate the adapters you want to use
-    adapter_names = bert.config.adapters.adapters.keys()
+    adapter_names = list(bert.config.adapters.adapters.keys())
     bert.set_active_adapters(adapter_names)
 
     """"
