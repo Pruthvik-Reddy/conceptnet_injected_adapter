@@ -1,5 +1,5 @@
 import torch
-from transformers import BertTokenizer, BertForMaskedLM, LineByLineTextDataset, DataCollatorForLanguageModeling, TrainingArguments,AdapterTrainer
+from transformers import BertTokenizer, BertForMaskedLM, LineByLineTextDataset, DataCollatorForLanguageModeling, TrainingArguments,AdapterTrainer,AdapterConfig
 
 tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 corpus_file = "./conceptnet_data/conceptnet_corpus.txt"
@@ -17,14 +17,15 @@ data_collator = DataCollatorForLanguageModeling(
 )
 
 model = BertForMaskedLM.from_pretrained('bert-base-uncased')
+adapter_config = AdapterConfig.load("houlsby")
+
 num_adapters = model.config.num_hidden_layers
 adapter_names=[]
 for i in range(num_adapters):
     adapter_name = f"adapter_{i}"
     adapter_names.append(adapter_name)
-    model.add_adapter(adapter_name,layer_pattern=[True, False])
-    model.add_adapter(adapter_name,layer_pattern=[False, True])
-
+    model.add_adapter(adapter_name,config=adapter_config)
+    
 model.set_active_adapters(adapter_names)
 model.train_adapter(adapter_names)
 
