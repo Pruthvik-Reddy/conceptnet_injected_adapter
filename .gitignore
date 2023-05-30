@@ -1,3 +1,10 @@
 logs/
 wandb/
 adapter_conceptnet_model/
+adapter_conceptnet_model_3/
+adapter_conceptnet_model_2/
+logs2/
+logs3/
+__pycache__/
+saves/
+
