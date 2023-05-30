@@ -249,11 +249,11 @@ def run_eval(args, logger, model, eval_dataloader, all_guids, task_name, return_
 
 def load_pretrained_model(args):
     
-
-    adapter_config = BertConfig.from_pretrained("./adapter_conceptnet_model/config.json")
+    #adapter_config = BertConfig.from_pretrained("./adapter_conceptnet_model/config.json")
+    adapter_config = BertConfig.from_pretrained("./adapter_conceptnet_model_3/config.json")
     adapter_config.output_hidden_states=True
     # Initialize the adapter model with the adapter configuration
-    bert= BertForMaskedLM.from_pretrained("./adapter_conceptnet_model/", config=adapter_config)
+    bert= BertForMaskedLM.from_pretrained("./adapter_conceptnet_model_3/", config=adapter_config)
     # Optionally, activate the adapters you want to use
     adapter_names = list(bert.config.adapters.adapters.keys())
     bert.set_active_adapters(adapter_names)
@@ -324,16 +324,20 @@ def save_model(args, model, tokenizer):
     torch.save(model_to_save.state_dict(), output_model_file)
     model_to_save.config.to_json_file(output_config_file)
     tokenizer.save_vocabulary(args.log_dir)
-
+    print("In save_model, output_model_file is ",output_model_file)
+    print("In save_model, output_config_file is ",output_config_file)
+    
     # Good practice: save your training arguments together with the trained model
     output_args_file = os.path.join(args.log_dir, ARGS_NAME)
+    print("In save_model, output_args_file is ",output_args_file)
+    
     torch.save(args, output_args_file)
 
 
 def load_trained_model(args, model, tokenizer):
     # If we save using the predefined names, we can load using `from_pretrained`
     output_model_file = os.path.join(args.log_dir, WEIGHTS_NAME)
-
+    print("In load_trained_module, model loading from : ",output_model_file)
     if hasattr(model, "module"):
         model.module.load_state_dict(torch.load(output_model_file))
     else:
@@ -529,6 +533,7 @@ def main():
                 )
                 run_eval(args, logger, model, eval_dataloader, all_guids, task_name)
         else:
+            print("Testing without Genre or POS data")
             all_guids, eval_dataloader = load_test_data(
                 args, logger, processor, task_name, label_list, tokenizer, output_mode
             )
