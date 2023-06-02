@@ -7,4 +7,5 @@ logs2/
 logs3/
 __pycache__/
 saves/
+conceptnet_data/conceptnet_corpus_2.txt
 
