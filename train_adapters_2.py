@@ -32,12 +32,12 @@ model.train_adapter(adapter_names)
 training_args = TrainingArguments(
     output_dir="./adapter_conceptnet_model_2", 
     num_train_epochs=3, 
-    per_device_train_batch_size=16,  
+    per_device_train_batch_size=128,  
     save_steps=500,
-    learning_rate=5e-5,  
+    learning_rate=10e-5,  
     warmup_steps=500,  
     logging_dir="./logs2", 
-    logging_steps=100, 
+    logging_steps=1000, 
     #evaluation_strategy="steps",  
     #eval_steps=500, 
     dataloader_num_workers=4 
