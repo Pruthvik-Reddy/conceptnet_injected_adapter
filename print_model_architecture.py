@@ -25,11 +25,9 @@ for i in range(num_adapters):
     adapter_name = f"adapter_{i}"
     adapter_names.append(adapter_name)
     model.add_adapter(adapter_name,config=adapter_config)
-    break
     
 model.set_active_adapters(adapter_names)
 model.train_adapter(adapter_names)
-
 
 print(model)
 for w in model.named_parameters():
