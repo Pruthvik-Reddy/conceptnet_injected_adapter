@@ -25,12 +25,16 @@ for i in range(num_adapters):
     adapter_name = f"adapter_{i}"
     adapter_names.append(adapter_name)
     model.add_adapter(adapter_name,config=adapter_config)
+    break
     
 model.set_active_adapters(adapter_names)
 model.train_adapter(adapter_names)
 
+
 print(model)
+
 for w in model.named_parameters():
   # if w[1].requires_grad == True:
   print(w[0], end=",\t")
   print(w[1].shape)
+summary(model,input_size=(768,),depth=1,batch_dim=1, dtypes=[‘torch.IntTensor’]) 
