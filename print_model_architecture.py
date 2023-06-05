@@ -38,3 +38,13 @@ for w in model.named_parameters():
   print(w[0], end=",\t")
   print(w[1].shape)
 summary(model,input_size=(768,),depth=1,batch_dim=1, dtypes=['torch.IntTensor']) 
+
+
+
+print(" Calculating BERT, Adapter, Active and Total Parameters :")
+num_params = sum(p.numel() for p in model.parameters())
+
+print("Number of parameters in BERT: ", num_params)
+trainable_params = filter(lambda p: p.requires_grad, model.parameters())
+num_trainable_params = sum(p.numel() for p in trainable_params)
+print("\nNumber of Trainable Parameters:", num_trainable_params)
