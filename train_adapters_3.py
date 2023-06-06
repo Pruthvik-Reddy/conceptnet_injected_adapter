@@ -3,7 +3,8 @@ from transformers import BertTokenizer, BertForMaskedLM, LineByLineTextDataset, 
 
 tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 corpus_file = "./conceptnet_data/conceptnet_corpus_2.txt"
-
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print("Device:", device)
 dataset = LineByLineTextDataset(
     tokenizer=tokenizer,
     file_path=corpus_file,
@@ -16,7 +17,7 @@ data_collator = DataCollatorForLanguageModeling(
     mlm_probability=0.15  
 )
 
-model = BertForMaskedLM.from_pretrained('bert-base-uncased')
+model = BertForMaskedLM.from_pretrained('bert-base-uncased').to(device)
 adapter_config = AdapterConfig.load("houlsby")
 
 num_adapters = model.config.num_hidden_layers
@@ -45,7 +46,7 @@ training_args = TrainingArguments(
 )
 
 trainer = AdapterTrainer(
-    model=model,
+    model=model.to(device),
     args=training_args,
     data_collator=data_collator,
     train_dataset=dataset
