@@ -91,6 +91,11 @@ def run_train(
             else:
                 input_ids, input_mask, segment_ids, label_ids = batch
 
+            input_ids=input_ids.to(args.device)
+            input_mask=input_mask.to(args.device)
+            segment_ids=segment_ids.to(args.device)
+            label_ids=label_ids.to(args.device)
+
             # compute loss values
             if args.model_type in ["BERT_SEQ", "BERT_BASE", "MELBERT_SPV"]:
                 logits = model(
@@ -98,7 +103,7 @@ def run_train(
                     target_mask=(segment_ids == 1),
                     token_type_ids=segment_ids,
                     attention_mask=input_mask,
-                )
+                ).to(args.device)
                 loss_fct = nn.NLLLoss(weight=torch.Tensor([1, args.class_weight]).to(args.device))
                 loss = loss_fct(logits.view(-1, args.num_labels), label_ids.view(-1))
             elif args.model_type in ["MELBERT_MIP", "MELBERT"]:
@@ -110,7 +115,7 @@ def run_train(
                     attention_mask_2=input_mask_2,
                     token_type_ids=segment_ids,
                     attention_mask=input_mask,
-                )
+                ).to(args.device)
                 loss_fct = nn.NLLLoss(weight=torch.Tensor([1, args.class_weight]).to(args.device))
                 loss = loss_fct(logits.view(-1, args.num_labels), label_ids.view(-1))
 
@@ -180,7 +185,6 @@ def run_eval(args, logger, model, eval_dataloader, all_guids, task_name, return_
             ) = eval_batch
         else:
             input_ids, input_mask, segment_ids, label_ids, idx = eval_batch
-
         with torch.no_grad():
             # compute loss values
             if args.model_type in ["BERT_BASE", "BERT_SEQ", "MELBERT_SPV"]:
