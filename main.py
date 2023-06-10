@@ -380,7 +380,15 @@ def main():
 
     # logger
     if "saves" in args.bert_model:
+        print("Printing Args :")
+        print(args)
+        print()
+        print("args.bert_model : ",args.bert_model)
+        print("Saves Present in args.bert_model")
         log_dir = args.bert_model
+        print()
+        print()
+        print("Log dir :",log_dir)
         logger = Logger(log_dir)
         config = Config(main_conf_path=log_dir)
         old_args = copy.deepcopy(args)
@@ -408,7 +416,8 @@ def main():
         logger = Logger(log_dir)
         config.save(log_dir)
     args.log_dir = log_dir
-
+    print()
+    print("New Args :",args)
     # set CUDA devices
     device = torch.device("cuda" if torch.cuda.is_available() and not args.no_cuda else "cpu")
     args.n_gpu = torch.cuda.device_count()
@@ -528,7 +537,9 @@ def main():
     # Load trained model
     if "saves" in args.bert_model:
         model = load_trained_model(args, model, tokenizer)
-
+        print()
+        print("Saves present in args.bert_model")
+        print("Trained model being loaded")
     ########### Inference ###########
     # VUA18 / VUA20
     if (args.do_eval or args.do_test) and task_name == "vua":
