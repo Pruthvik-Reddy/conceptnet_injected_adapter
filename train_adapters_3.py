@@ -1,7 +1,7 @@
 import torch
 from transformers import BertTokenizer, BertForMaskedLM, LineByLineTextDataset, DataCollatorForLanguageModeling, TrainingArguments,AdapterTrainer,AdapterConfig
 
-tokenizer = BertTokenizer.from_pretrained('roberta-base')
+tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 corpus_file = "./conceptnet_data/conceptnet_corpus_2.txt"
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print("Device:", device)
@@ -17,7 +17,7 @@ data_collator = DataCollatorForLanguageModeling(
     mlm_probability=0.15  
 )
 
-model = BertForMaskedLM.from_pretrained('roberta-base').to(device)
+model = BertForMaskedLM.from_pretrained('bert-base-uncased').to(device)
 adapter_config = AdapterConfig.load("houlsby")
 
 num_adapters = model.config.num_hidden_layers
@@ -32,7 +32,7 @@ model.set_active_adapters(adapter_names)
 model.train_adapter(adapter_names)
 
 training_args = TrainingArguments(
-    output_dir="./adapter_conceptnet_model_4", 
+    output_dir="./adapter_conceptnet_model_3", 
     num_train_epochs=3, 
     per_device_train_batch_size=16,  
     save_steps=500,
@@ -53,4 +53,4 @@ trainer = AdapterTrainer(
 )
 
 trainer.train()
-model.save_pretrained("./adapter_conceptnet_model_4")
+model.save_pretrained("./adapter_conceptnet_model_3")
