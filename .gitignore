@@ -10,3 +10,4 @@ saves/
 conceptnet_data/conceptnet_corpus_2.txt
 conceptnet_data/rw_corpus_1.0_1.0_2_15_nl_2.txt
 saved_models/
+adapter_conceptnet_model_4/
