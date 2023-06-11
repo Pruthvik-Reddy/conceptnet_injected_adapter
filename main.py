@@ -541,7 +541,9 @@ def main():
         print("Saves present in args.bert_model")
         print("Trained model being loaded")
     ########### Inference ###########
-    # VUA18 / VUA20
+    # VUA18 / 
+    model = load_trained_model(args, model, tokenizer)
+        
     if (args.do_eval or args.do_test) and task_name == "vua":
         # if test data is genre or POS tag data
         if ("genre" in args.data_dir) or ("pos" in args.data_dir):
