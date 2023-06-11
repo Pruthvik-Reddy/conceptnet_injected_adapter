@@ -11,7 +11,7 @@ import torch.nn as nn
 from tqdm import tqdm, trange
 from collections import OrderedDict
 from torch.utils.data import DataLoader, RandomSampler, SequentialSampler, TensorDataset
-from transformers import BertTokenizer, BertForMaskedLM, BertConfig, AdamW, get_linear_schedule_with_warmup
+from transformers import BertTokenizer, BertForMaskedLM, RobertaTokenizer, RobertaForMaskedLM,RobertaConfig, BertConfig, AdamW, get_linear_schedule_with_warmup
 
 from utils import Config, Logger, make_log_dir
 from modeling import (
@@ -254,10 +254,15 @@ def run_eval(args, logger, model, eval_dataloader, all_guids, task_name, return_
 def load_pretrained_model(args):
     
     #adapter_config = BertConfig.from_pretrained("./adapter_conceptnet_model/config.json")
+    """
     adapter_config = BertConfig.from_pretrained("./adapter_conceptnet_model_3/config.json")
     adapter_config.output_hidden_states=True
+    """
+    adapter_config = RobertaConfig.from_pretrained("./adapter_conceptnet_model_2/config.json")
+    adapter_config.output_hidden_states=True
+    
     # Initialize the adapter model with the adapter configuration
-    bert= BertForMaskedLM.from_pretrained("./adapter_conceptnet_model_3/", config=adapter_config)
+    bert= RobertaForMaskedLM.from_pretrained("./adapter_conceptnet_model_2/", config=adapter_config)
     # Optionally, activate the adapters you want to use
     adapter_names = list(bert.config.adapters.adapters.keys())
     bert.set_active_adapters(adapter_names)
@@ -334,7 +339,7 @@ def save_model(args, model, tokenizer):
     # Good practice: save your training arguments together with the trained model
     output_args_file = os.path.join(args.log_dir, ARGS_NAME)
     print("In save_model, output_args_file is ",output_args_file)
-    torch.save(model_to_save.state_dict(), './saved_models/adapter_model_3.pth')
+    torch.save(model_to_save.state_dict(), './saved_models/adapter_model_2.pth')
     torch.save(args, output_args_file)
 
 
@@ -352,9 +357,9 @@ def load_trained_model(args, model, tokenizer):
         
     """
     if hasattr(model, "module"):
-        model.module.load_state_dict(torch.load('./saved_models/adapter_model_3.pth'))
+        model.module.load_state_dict(torch.load('./saved_models/adapter_model_2.pth'))
     else:
-        model.load_state_dict(torch.load('./saved_models/adapter_model_3.pth'))
+        model.load_state_dict(torch.load('./saved_models/adapter_model_2.pth'))
     
 
     return model
@@ -440,7 +445,7 @@ def main():
     args.num_labels = len(label_list)
 
     # build tokenizer and model
-    tokenizer = BertTokenizer.from_pretrained(args.bert_model, do_lower_case=args.do_lower_case)
+    tokenizer = RobertaTokenizer.from_pretrained(args.bert_model, do_lower_case=args.do_lower_case)
     model = load_pretrained_model(args)
 
     ########### Training ###########
@@ -542,7 +547,7 @@ def main():
         print("Trained model being loaded")
     ########### Inference ###########
     # VUA18 / 
-    model = load_trained_model(args, model, tokenizer)
+    #model = load_trained_model(args, model, tokenizer)
         
     if (args.do_eval or args.do_test) and task_name == "vua":
         # if test data is genre or POS tag data
