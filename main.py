@@ -261,11 +261,11 @@ def load_pretrained_model(args):
     adapter_config = BertConfig.from_pretrained("./adapter_conceptnet_model_3/config.json")
     adapter_config.output_hidden_states=True
     """
-    adapter_config = RobertaConfig.from_pretrained("./adapter_conceptnet_model_2/config.json")
+    adapter_config = RobertaConfig.from_pretrained("./random_adapter/config.json")
     adapter_config.output_hidden_states=True
     
     # Initialize the adapter model with the adapter configuration
-    bert= RobertaForMaskedLM.from_pretrained("./adapter_conceptnet_model_2/", config=adapter_config)
+    bert= RobertaForMaskedLM.from_pretrained("./random_adapter/", config=adapter_config)
     # Optionally, activate the adapters you want to use
     adapter_names = list(bert.config.adapters.adapters.keys())
     bert.set_active_adapters(adapter_names)
@@ -346,7 +346,7 @@ def save_model(args, model, tokenizer):
     # Good practice: save your training arguments together with the trained model
     output_args_file = os.path.join(args.log_dir, ARGS_NAME)
     print("In save_model, output_args_file is ",output_args_file)
-    torch.save(model_to_save.state_dict(), './saved_models/adapter_model_5.pth')
+    torch.save(model_to_save.state_dict(), './saved_models/adapter_model_6.pth')
     torch.save(args, output_args_file)
 
 
@@ -364,9 +364,9 @@ def load_trained_model(args, model, tokenizer):
         
     """
     if hasattr(model, "module"):
-        model.module.load_state_dict(torch.load('./saved_models/adapter_model_5.pth'))
+        model.module.load_state_dict(torch.load('./saved_models/adapter_model_6.pth'))
     else:
-        model.load_state_dict(torch.load('./saved_models/adapter_model_5.pth'))
+        model.load_state_dict(torch.load('./saved_models/adapter_model_6.pth'))
     
 
     return model
@@ -554,7 +554,7 @@ def main():
         print("Trained model being loaded")
     ########### Inference ###########
     # VUA18 / 
-    model = load_trained_model(args, model, tokenizer)
+    #model = load_trained_model(args, model, tokenizer)
         
     if (args.do_eval or args.do_test) and task_name == "vua":
         # if test data is genre or POS tag data
