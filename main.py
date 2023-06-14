@@ -104,8 +104,8 @@ def run_train(
                     token_type_ids=segment_ids,
                     attention_mask=input_mask,
                 ).to(args.device)
-                print("Logits shape : ",logits.shape)
-                print("Label ids shape : ",label_ids.shape)
+                #print("Logits shape : ",logits.shape)
+                #print("Label ids shape : ",label_ids.shape)
                 loss_fct = nn.NLLLoss(weight=torch.Tensor([1, args.class_weight]).to(args.device))
                 loss = loss_fct(logits.view(-1, args.num_labels), label_ids.view(-1))
                 
