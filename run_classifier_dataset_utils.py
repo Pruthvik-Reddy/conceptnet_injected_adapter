@@ -418,6 +418,7 @@ def convert_two_examples_to_features(
         )
         print("Padding : ",padding)
         print("len of padding : ",len(padding))
+        print("len of segment ids : ",len(segment_ids))
         input_ids += padding
         input_mask += [0] * len(padding)
         segment_ids += [0] * len(padding)
