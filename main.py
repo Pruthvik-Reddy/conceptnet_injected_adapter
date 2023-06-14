@@ -554,7 +554,7 @@ def main():
         print("Trained model being loaded")
     ########### Inference ###########
     # VUA18 / 
-    #model = load_trained_model(args, model, tokenizer)
+    model = load_trained_model(args, model, tokenizer)
         
     if (args.do_eval or args.do_test) and task_name == "vua":
         # if test data is genre or POS tag data
