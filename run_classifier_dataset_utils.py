@@ -376,7 +376,7 @@ def convert_two_examples_to_features(
                 if w_tok:
                     tokens_b += len(w_tok) - 1
             
-            print("tokens_b :",tokens_b)
+            #print("tokens_b :",tokens_b)
 
         except TypeError:
             if example.text_b:
