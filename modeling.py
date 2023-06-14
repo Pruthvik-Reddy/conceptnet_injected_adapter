@@ -65,14 +65,15 @@ class AutoModelForSequenceClassification(nn.Module):
         #last_layer_hidden_states = outputs.hidden_states[-1]
         last_hidden_state = outputs.hidden_states[-1]
 
+        pooled_output=last_hidden_state[:,0,:]
         
 
-        pooled_output = self.dropout(last_hidden_state)
-        print("Pooled output shape : ",pooled_output.shape)
+        pooled_output = self.dropout(pooled_output)
+        #print("Pooled output shape : ",pooled_output.shape)
         logits = self.classifier(pooled_output)
-        print("logits shape : ",logits.shape)
+        #print("logits shape : ",logits.shape)
         logits = self.logsoftmax(logits)
-        print("logits shape : ",logits.shape)
+        #print("logits shape : ",logits.shape)
         if labels is not None:
             loss_fct = nn.NLLLoss()
             loss = loss_fct(logits.view(-1, self.num_labels), labels.view(-1))
