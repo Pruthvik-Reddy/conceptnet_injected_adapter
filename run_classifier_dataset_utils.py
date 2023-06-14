@@ -413,7 +413,9 @@ def convert_two_examples_to_features(
         input_ids += padding
         input_mask += [0] * len(padding)
         segment_ids += [0] * len(padding)
-
+        print("Len of input_ids ",len(input_ids))
+        print("Len of input mask ",len(input_mask))
+        print("Len of segment ids ",len(segment_ids))
         assert len(input_ids) == max_seq_length
         assert len(input_mask) == max_seq_length
         assert len(segment_ids) == max_seq_length
