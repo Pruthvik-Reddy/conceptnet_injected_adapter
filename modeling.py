@@ -66,7 +66,7 @@ class AutoModelForSequenceClassification(nn.Module):
         last_hidden_state = outputs.hidden_states[-1]
 
         
-
+        
         pooled_output = self.dropout(last_hidden_state)
         logits = self.classifier(pooled_output)
         logits = self.logsoftmax(logits)

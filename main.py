@@ -343,7 +343,7 @@ def save_model(args, model, tokenizer):
     # Good practice: save your training arguments together with the trained model
     output_args_file = os.path.join(args.log_dir, ARGS_NAME)
     print("In save_model, output_args_file is ",output_args_file)
-    torch.save(model_to_save.state_dict(), './saved_models/adapter_model_4.pth')
+    torch.save(model_to_save.state_dict(), './saved_models/adapter_model_5.pth')
     torch.save(args, output_args_file)
 
 
@@ -361,9 +361,9 @@ def load_trained_model(args, model, tokenizer):
         
     """
     if hasattr(model, "module"):
-        model.module.load_state_dict(torch.load('./saved_models/adapter_model_4.pth'))
+        model.module.load_state_dict(torch.load('./saved_models/adapter_model_5.pth'))
     else:
-        model.load_state_dict(torch.load('./saved_models/adapter_model_4.pth'))
+        model.load_state_dict(torch.load('./saved_models/adapter_model_5.pth'))
     
 
     return model
