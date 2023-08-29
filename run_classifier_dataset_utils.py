@@ -431,6 +431,8 @@ def convert_two_examples_to_features(
         assert len(segment_ids) == max_seq_length
 
         if output_mode == "classification":
+            print("Example is ",example)
+            print("example.label is ",example.label)
             label_id = label_map[example.label]
         else:
             raise KeyError(output_mode)
