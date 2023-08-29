@@ -242,8 +242,6 @@ def convert_examples_to_features(
 ):
     """Loads a data file into a list of `InputBatch`s."""
     label_map = {label: i for i, label in enumerate(label_list)}
-    print(label_map)
-    print(label_list)
     features = []
     for (ex_index, example) in enumerate(examples):
         if ex_index % 10000 == 0:
@@ -342,9 +340,7 @@ def convert_examples_to_features(
 def convert_two_examples_to_features(
     examples, label_list, max_seq_length, tokenizer, output_mode, win_size=-1
 ):
-    print("label list is ",label_list)
     label_map = {label: i for i, label in enumerate(label_list)}
-    print("Label_map is ",label_map)
     features = []
     for (ex_index, example) in enumerate(examples):
         if ex_index % 10000 == 0:
@@ -353,17 +349,12 @@ def convert_two_examples_to_features(
         tokens_a = tokenizer.tokenize(example.text_a)  # tokenize the sentence
         tokens_b = None
         text_b = None
-        #print("Example ",example)
-        #print("Example.text_a : ",example.text_a)
-        #print("tokens_a : ",tokens_a)
         try:
             text_b = int(example.text_b)  # index of target word
             tokens_b = text_b
-            #print("text_b : ",text_b)
             # truncate the sentence to max_seq_len
             if len(tokens_a) > max_seq_length - 2:
                 tokens_a = tokens_a[: (max_seq_length - 2)]
-            #print("Len of tokens_a ",len(tokens_a))
             # Find the target word index
             for i, w in enumerate(example.text_a.split()):
                 # If w is a target word, tokenize the word and save to text_b
@@ -417,22 +408,14 @@ def convert_two_examples_to_features(
         padding = [tokenizer.convert_tokens_to_ids(tokenizer.pad_token)] * (
             max_seq_length - len(input_ids)
         )
-        #print("Padding : ",padding)
-        #print("len of padding : ",len(padding))
-        #print("len of segment ids : ",len(segment_ids))
         input_ids += padding
         input_mask += [0] * len(padding)
         segment_ids += [0] * len(padding)
-        #print("Len of input_ids ",len(input_ids))
-        #print("Len of input mask ",len(input_mask))
-        #print("Len of segment ids ",len(segment_ids))
         assert len(input_ids) == max_seq_length
         assert len(input_mask) == max_seq_length
         assert len(segment_ids) == max_seq_length
 
         if output_mode == "classification":
-            #print("Example is ",example)
-            print("example.label is ",example.label)
             label_id = label_map[example.label]
         else:
             raise KeyError(output_mode)
@@ -463,8 +446,6 @@ def convert_examples_to_two_features(
 ):
     """Loads a data file into a list of `InputBatch`s."""
     label_map = {label: i for i, label in enumerate(label_list)}
-    print(label_map)
-    print(label_list)
     features = []
     for (ex_index, example) in enumerate(examples):
         if ex_index % 10000 == 0:
