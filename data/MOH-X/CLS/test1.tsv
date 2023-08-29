@@ -1,65 +1,65 @@
-index	label	sentence	pos	v_index
-64	0	The bird flapped its wings.	VERB	2
-65	1	Their faces were clouded with sadness.	VERB	3
-66	1	She traced the circumstances of her birth.	VERB	1
-67	0	The wax melted in the sun.	VERB	2
-68	0	inject hydrogen into the balloon.	VERB	0
-69	0	The prisoner tugged at the chains.	VERB	2
-70	1	The bicycle looped around the tree.	VERB	2
-71	0	The nurse pricked my finger to get a small blood sample.	VERB	2
-72	1	The spaceship blazed out into space.	VERB	2
-73	0	she lightened the load on the tired donkey.	VERB	1
-74	0	relax the tension on the rope.	VERB	0
-75	1	flush the wound with antibiotics.	VERB	0
-76	0	They scraped a letter into the stone.	VERB	1
-77	0	She whistled for her maid.	VERB	1
-78	0	The bellies of the starving children are swelling.	VERB	7
-79	0	our new colleague relaxed when he saw that we were a friendly group.	VERB	3
-80	0	trace the outline of a figure in the sand.	VERB	0
-81	0	the bullet pinged when they struck the car.	VERB	2
-82	1	stamp fruit extract the juice.	VERB	0
-83	0	She leaned over the banister.	VERB	1
-84	1	her indifference to his amorous advances really steamed the young man.	VERB	7
-85	0	The ground levelled off.	VERB	2
-86	0	The lights were flashing.	VERB	3
-87	1	earthquakes convulsed the countryside.	VERB	1
-88	1	I can not digest all this information.	VERB	3
-89	1	We poured money into the education of our children.	VERB	1
-90	0	The towers were topped with conical roofs.	VERB	3
-91	1	The soldiers sifted through the woods.	VERB	2
-92	1	The latest intelligence is flashed to all command posts.	VERB	4
-93	0	tread grapes to make wine.	VERB	0
-94	1	lay a responsibility on someone.	VERB	0
-95	0	The fireflies were glowing and flying about in the garden.	VERB	3
-96	1	The stroke clouded memories of her youth.	VERB	2
-97	1	condense the contents of a book into a summary.	VERB	0
-98	0	A hot bath always relaxes me.	VERB	4
-99	0	wear one's hair in a certain way.	VERB	0
-100	0	They poured water over the floor.	VERB	1
-101	0	Your children have infected you with this head cold.	VERB	3
-102	0	I can breathe better when the air is clean.	VERB	2
-103	1	The government floated the ruble for a few months.	VERB	2
-104	1	The crisis precipitated by Russia's revolution.	VERB	2
-105	0	Who erased the files form my hard disk?	VERB	1
-106	1	She radiates happiness.	VERB	1
-107	0	The stunt pilot looped his plane.	VERB	3
-108	1	They taxed him failure to appear in court.	VERB	1
-109	1	His heart palpitated.	VERB	2
-110	0	They bind their books in leather.	VERB	1
-111	1	only few plants can immigrate to the island.	VERB	4
-112	1	They sifted through the job candidates.	VERB	1
-113	1	The White House sits on Pennsylvania Avenue.	VERB	3
-114	0	Suddenly, the proprietor emerged from his office.	VERB	3
-115	1	I'll ping my accountant -- April 15 is nearing.	VERB	1
-116	0	The furniture molded in the old house.	VERB	2
-117	0	The child drowned in the lake.	VERB	2
-118	0	The cord is all twisted.	VERB	4
-119	0	We sailed the Atlantic.	VERB	1
-120	0	These architects build in interesting and new styles.	VERB	2
-121	1	She could not recapture that feeling of happiness.	VERB	3
-122	1	build a modern nation.	VERB	0
-123	1	The music swelled to a crescendo.	VERB	2
-124	1	The hiker negociated the high mountain pass.	VERB	2
-125	1	Unrest erupted in the country.	VERB	1
-126	0	T. Boone Pickens raided many large companies.	VERB	3
-127	1	communicate a disease.	VERB	0
+	label	sentence	pos	v_index
+64	0	mushroom has property green. mushroom is at location field. mushroom is used for eat. poison desires eat person. poison is at location jar. poison is used for kill.  This mushrooms can poison .	verb	3
+65	0	book has property good than book. book is at location shelf. book is used for learn. line desires be play. line is at location map. line is used for measure.  lined books are more enduring .	verb	0
+66	1	moon has property large. moon is at location sky. moon is used for live on. peep desires be light. peep is at location church. peep is used for let in light.  The new moon peeped through the tree tops .	verb	3
+67	1	experience has property important. experience is at location school. experience is used for learn. transform desires become more powerful. transform is at location zoo. transform is used for create new form of magic.  This experience transformed her completely .	verb	2
+68	0	formula has property complex. formula is at location laboratory. formula is used for determine value. erase desires erase. erase is at location desk. erase is used for erase.  Please erase the formula on the blackboard -- it is wrong !	verb	1
+69	0	camp has property fun. camp is at location mountain. camp is used for camp. trench desires kill person. trench is at location forest. trench is used for protect your foot from snow.  He trenched his military camp .	verb	1
+70	0	bee has property small. bee is at location field. bee is used for sting. buzz desires play game. buzz is at location air. buzz is used for fun.  bees were buzzing around the hive .	verb	2
+71	1	refrigerator has property hot. refrigerator is at location home. refrigerator is used for keep food cold. raid desires capture. raid is at location war. raid is used for kill person.  Our babysitter raided our refrigerator .	verb	2
+72	0	ball has property round. ball is at location toy store. ball is used for play game. bounce desires win. bounce is at location park. bounce is used for exercise.  The rubber ball bounced .	verb	3
+73	0	snake has property dangerous. snake is at location forest. snake is used for kill. swim desires swim. swim is at location beach. swim is used for exercise.  this snake swims through the soil where it lives .	verb	2
+74	1	conversation has property important to person. conversation is at location dinner. conversation is used for pass time. gravitate desires you. gravitate is at location universe. gravitate is used for make thing look good.  The conversation gravitated towards politics .	verb	2
+75	0	foot has property long. foot is at location shoe. foot is used for stand on. blister desires burn. blister is at location finger. blister is used for burn.  Her feet blistered during the long hike .	verb	2
+76	0	tanker has property very large. tanker is at location in space. tanker is used for ship cargo. fuel desires fuel. fuel is at location plane. fuel is used for travel.  The tanker fueled in Bahrain .	verb	2
+77	0	wax has property flammable. wax is at location jar. wax is used for lubricate. melt desires be quench. melt is at location ice. melt is used for make ice.  The wax melted in the sun .	verb	2
+78	1	system has property complex. system is at location computer. system is used for store data. abuse desires be free. abuse is at location home. abuse is used for get what you want.  Do n't abuse the system .	verb	2
+79	0	wine has property good for you. wine is at location winery. wine is used for drink. breathe desires live. breathe is at location your lung. breathe is used for live.  This rare Bordeaux must be allowed to breathe for at least 2 hours .	verb	7
+80	1	idea has property important. idea is at location book. idea is used for understand. recapture desires sex. recapture is at location war. recapture is used for get back to normal life.  The author recaptures an old idea here .	verb	2
+81	1	success has property important. success is at location school. success is used for achieve goal. wallow desires drown. wallow is at location boat. wallow is used for get rid of excess water.  wallow in your success !	verb	0
+82	1	rule has property important. rule is at location school. rule is used for enforce law. relax desires sleep. relax is at location home. relax is used for feel good.  The rules relaxed after the new director arrived .	verb	2
+83	1	river has property very deep. river is at location river. river is used for travel. thunder desires thunder. thunder is at location thunderstorm. thunder is used for scare person.  The river thundered below .	verb	2
+84	0	surface has property flat. surface is at location water. surface is used for hold thing together. map desires map. map is at location library. map is used for find place.  map the surface of Venus .	verb	0
+85	0	room has property dark. room is at location build. room is used for store thing. paint desires be paint. paint is at location wall. paint is used for make art.  We painted the rooms yellow .	verb	1
+86	1	liquid has property liquid. liquid is at location bottle. liquid is used for make wine. cloud desires be extinguish. cloud is at location sky. cloud is used for rain.  The chemical clouded the liquid to which it was added .	verb	2
+87	0	glucose has property good for you. glucose is at location sugar bowl. glucose is used for make sugar. inject desires person to drink. inject is at location hospital. inject is used for inject drug.  We injected the glucose into the patient 's vein .	verb	1
+88	0	pedal has property hard. pedal is at location car. pedal is used for move. jam desires eat. jam is at location jar. jam is used for eat.  The driver jammed the brake pedal to the floor .	verb	2
+89	0	ball has property round. ball is at location toy store. ball is used for play game. volley desires fire. volley is at location war. volley is used for kill.  They began to volley the tennis ball .	verb	3
+90	0	crocodile has property reptile. crocodile is at location zoo. crocodile is used for fish. crawl desires explore. crawl is at location cellar. crawl is used for get to top.  The crocodile was crawling along the riverbed .	verb	3
+91	1	man has property male. man is at location bed. man is used for fuck. drift desires swim in water. drift is at location water. drift is used for swim.  The unknown young man drifted among the invited guests .	verb	4
+92	0	haze has property unpleasant. haze is at location thunderstorm. haze is used for clear vision. blur desires play. blur is at location movie. blur is used for forget.  The haze blurs the hills .	verb	2
+93	1	opponent has property unpredictable. opponent is at location sport event. opponent is used for intimidate. paste desires paste. paste is at location cupboard. paste is used for make paste.  He pasted his opponent .	verb	1
+94	1	lecture has property bore. lecture is at location school. lecture is used for learn. salt desires salt water. salt is at location ocean. salt is used for flavor food.  She salts her lectures with jokes .	verb	1
+95	0	suit has property comfortable. suit is at location closet. suit is used for wear. brush desires brush tooth. brush is at location drawer. brush is used for brush tooth.  She brushed the suit before hanging it back into the closet .	verb	1
+96	0	woman has property female. woman is at location bed. woman is used for have sex. talk desires be understand. talk is at location newspaper. talk is used for communicate.  She talks a lot of nonsense .	verb	1
+97	0	baby has property cute. baby is at location crib. baby is used for give birth. talk desires be understand. talk is at location newspaper. talk is used for communicate.  The baby talks already .	verb	2
+98	1	job has property bore. job is at location work. job is used for provide service. juggle desires play game. juggle is at location carnival. juggle is used for exercise.  She had to juggle her job and her children .	verb	3
+99	0	snow has property slippery. snow is at location antarctica. snow is used for make snowman. drift desires swim in water. drift is at location water. drift is used for swim.  snow drifting several feet high .	verb	1
+100	1	opposition has property bad. opposition is at location war. opposition is used for change society. steamroller desires move forward. steamroller is at location street. steamroller is used for move.  steamroller the opposition .	verb	0
+101	0	muscle has property hard. muscle is at location body. muscle is used for lift. convulse desires vomit. convulse is at location hospital. convulse is used for death.  The muscles in her face convulsed .	verb	5
+102	0	path has property walk. path is at location park. path is used for go somewhere. ascend desires fly. ascend is at location elevator. ascend is used for climb.  The path ascended to the top of the hill .	verb	2
+103	1	refusal has property bad. refusal is at location marriage. refusal is used for get something. crush desires girl. crush is at location carnival. crush is used for fun.  She was crushed by his refusal of her invitation .	verb	2
+104	1	novel has property fun. novel is at location bookstore. novel is used for entertainment. devour desires get fuck. devour is at location pizza. devour is used for satisfy hunger.  She devoured his novels .	verb	1
+105	0	piece has property flat. piece is at location puzzle. piece is used for make music. match desires light. match is at location pocket. match is used for light candle.  The two pieces match .	verb	3
+106	1	bullet has property dangerous. bullet is at location gun. bullet is used for kill. whistle desires play. whistle is at location parade. whistle is used for blow.  The bullets whistled past him .	verb	2
+107	1	mind has property complex. mind is at location your head. mind is used for think. clog desires water. clog is at location drain. clog is used for water plant.  Fear clogged her mind .	verb	1
+108	1	soldier has property dangerous. soldier is at location war. soldier is used for fight. sift desires find something. sift is at location table. sift is used for make clothe.  The soldiers sifted through the woods .	verb	2
+109	1	rash has property bad. rash is at location your finger. rash is used for sting. erupt desires fight. erupt is at location war. erupt is used for anger.  A rash erupted on her arms after she had touched the exotic plant .	verb	2
+110	1	price has property good. price is at location newspaper. price is used for buy thing. climb desires climb mountain. climb is at location mountain. climb is used for get up mountain.  Sales were climbing after prices were lowered .	verb	2
+111	1	industry has property good. industry is at location city. industry is used for manufacture. stagnate desires live in warm climate. stagnate is at location arctic. stagnate is used for move water.  Industry will stagnate if we do not stimulate our economy .	verb	2
+112	1	heart has property strong. heart is at location person. heart is used for love. capture desires be free. capture is at location war. capture is used for fun.  She captured all the men 's hearts .	verb	1
+113	1	mane has property curly. mane is at location horse. mane is used for keep horse mane from tear. stream desires swim in water. stream is at location pond. stream is used for swim.  their manes streamed like stiff black pennants in the wind .	verb	2
+114	0	chair has property comfortable. chair is at location at restaurant. chair is used for sit on. stagger desires drink. stagger is at location street. stagger is used for get somewhere.  The architect decided to stagger the chairs in the lecture hall .	verb	4
+115	1	scream has property bad. scream is at location opera. scream is used for get attention. pierce desires get lay. pierce is at location your finger. pierce is used for kill animal.  The scream pierced the night .	verb	2
+116	1	home has property nice. home is at location city. home is used for live in. devour desires get fuck. devour is at location pizza. devour is used for satisfy hunger.  Fire had devoured our home .	verb	2
+117	0	architect has property old. architect is at location build. architect is used for build. build desires be build. build is at location build. build is used for shelter.  These architects build in interesting and new styles .	verb	2
+118	1	face has property round. face is at location your face. face is used for look at thing. glow desires illuminate. glow is at location street. glow is used for illuminate.  Her face glowed when she came out of the sauna .	verb	2
+119	0	outline has property reflective. outline is at location newspaper. outline is used for draw. trace desires be find. trace is at location your finger. trace is used for identify object.  trace the outline of a figure in the sand .	verb	0
+120	1	doubt has property false. doubt is at location religion. doubt is used for lie. nag desires food. nag is at location dog. nag is used for get food.  nagging concerns and doubts .	verb	0
+121	1	illness has property bad. illness is at location hospital. illness is used for kill person. visit desires be entertain. visit is at location disneyland. visit is used for learn.  Every summer , we visited our relatives in the country for a month .	verb	4
+122	0	person has property afraid of dark. person is at location in bus. person is used for help. breathe desires live. breathe is at location your lung. breathe is used for live.  I can breathe better when the air is clean .	verb	2
+123	0	milk has property good. milk is at location milk. milk is used for milk. digest desires eat. digest is at location jar. digest is used for learn.  I can not digest milk products .	verb	3
+124	0	passenger has property drive. passenger is at location bus stop. passenger is used for travel. grab desires play game. grab is at location fish. grab is used for hold on.  The passenger grabbed for the oxygen mask .	verb	2
+125	0	wood has property hard. wood is at location build. wood is used for build fire. square desires be play. square is at location square. square is used for geometry.  square the wood with a file .	verb	0
+126	1	people has property afraid of dark. people is at location opera. people is used for help. pour desires light. pour is at location ice bucket. pour is used for quench thirst.  People were pouring out of the theater .	verb	2
+127	0	car has property dangerous. car is at location garage. car is used for travel. ruin desires be free. ruin is at location street. ruin is used for make new thing.  You have ruined my car by pouring sugar in the tank !	verb	2
