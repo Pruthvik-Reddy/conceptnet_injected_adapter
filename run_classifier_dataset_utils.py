@@ -342,9 +342,7 @@ def convert_examples_to_features(
 def convert_two_examples_to_features(
     examples, label_list, max_seq_length, tokenizer, output_mode, win_size=-1
 ):
-    #print("Label list is ",label_list) 
-   """Loads a data file into a list of `InputBatch`s."""
-    print("Label list is ",label_list)
+    print("label list is ",label_list)
     label_map = {label: i for i, label in enumerate(label_list)}
     print("Label_map is ",label_map)
     features = []
