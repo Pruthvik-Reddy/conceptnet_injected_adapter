@@ -350,6 +350,7 @@ def convert_two_examples_to_features(
         tokens_b = None
         text_b = None
         try:
+            print(example.text_b)
             text_b = int(example.text_b)  # index of target word
             tokens_b = text_b
             # truncate the sentence to max_seq_len
